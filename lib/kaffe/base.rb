@@ -8,6 +8,7 @@ module Kaffe
     include Kaffe::Actions
     include Kaffe::Routes
     include Kaffe::Settings
+    include Kaffe::Render
 
     attr_reader :params, :request, :response, :env
     def initialize(app=nil)

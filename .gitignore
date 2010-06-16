@@ -1,4 +1,5 @@
 *.swp
+*.haml
 config.ru
 public/*
 .bundle/
