@@ -24,9 +24,7 @@ module Kaffe
       def errors; @errors ||= [] end
 
       def error(name, &block)
-        #TODO: should probably get a better id for this.
         id = :"ERROR #{name}"
-        puts "Adding error handler #{id}"
         define_method(id, &block)
         case name
         when Range 
@@ -65,12 +63,13 @@ module Kaffe
           block.call
         end
       end
+      throw :no_error_handler, e
     end
 
     def error!
       dispatch_error!
     end
-
+    
     def self.included(base)
       base.extend(ClassMethods)
     end

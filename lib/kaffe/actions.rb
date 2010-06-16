@@ -58,10 +58,8 @@ module Kaffe
       begin
         dispatch_action!
       rescue Kaffe::Error::ActionNotFound => e
-        puts "Could not find Action"
         register_error(404, "Could Not Find Action")
       rescue Exception => error
-        puts "There was an Exception"
         register_error(500, error.message)
       ensure
         # TODO: after filter!

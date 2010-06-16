@@ -10,6 +10,8 @@ module Kaffe
     end
   
     def route!
+      
+      puts "DEBUG: route! in #{self.class.name}"
       path = env["PATH_INFO"].to_s
 
       self.class.routes.each do |exp, app|

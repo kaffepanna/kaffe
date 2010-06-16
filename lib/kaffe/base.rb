@@ -20,32 +20,38 @@ module Kaffe
       @request = Rack::Request.new(env)
       @response = Rack::Response.new
       run! { 
-        route!
-        action!
-        error!
+        # handle if errors were sent from route
+        if env['kaffe.error'] = catch(:no_error_handler) { route! }
+          error!
+        else
+          action!
+          error!
+        end
       }
-    
-      @response.finish
     end
 
     def run! &block
-      res = catch(:success) { block.call }
-      #return unless res
-      case res
-        when String
-          @response.body = [res]
-        when Array
-          @response.status = res[0]
-          res[1].each {|h, v| @response.headers[h] = v }
-          @response.body = res[2]
-        else
-          puts "Should not be here"
-          @response.status = 500
+      begin
+        res = catch(:success) { block.call }
+        case res
+          when String
+            @response.body = [res]
+          when Array
+            @response.status = res[0]
+            res[1].each {|h, v| @response.headers[h] = v }
+            @response.body = res[2]
+          else
+            puts "Should not be here"
+            @response.status = 500
+        end
+      rescue # Something got wrong and havent been handeled.
+        @response.status = env['kaffe.error'].first
+        @response.body = [env['kaffe.error'].last]
       end
 
+      @response.finish
     end
 
-    ## Default settings
 
     class << self
       def new(*args)
