@@ -18,6 +18,10 @@ forward requests between them easely
           get '/login' do
             ... Login logics ...
           end
+
+          error 400..500 do |code, message|
+            .. show pretty error message ..
+          end
         end
 
         class MyApp < Kaffe::Base
