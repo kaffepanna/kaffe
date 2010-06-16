@@ -4,7 +4,7 @@ rails.
 
 ## Basic usage
 The idea is to use be able to create modular applications and
-forward requests between them easely
+forward requests between them.
 
         class Blog < Kaffe::Base
           use Rack::CommonLogger
