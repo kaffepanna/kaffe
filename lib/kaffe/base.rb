@@ -28,6 +28,11 @@ module Kaffe
           error!
         end
       }
+      if @app
+        @app.call(@response.finish)
+      else
+        @response.finish
+      end
     end
 
     def run! &block
@@ -48,8 +53,6 @@ module Kaffe
         @response.status = env['kaffe.error'].first
         @response.body = [env['kaffe.error'].last]
       end
-
-      @response.finish
     end
 
 
