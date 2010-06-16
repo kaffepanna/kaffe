@@ -21,13 +21,13 @@ module Kaffe
       @response = Rack::Response.new
       run! { 
         # handle if errors were sent from route
-        if env['kaffe.error'] = catch(:no_error_handler) { route! }
+          env['kaffe.error'] = catch(:error) { 
+            route!
+            action!
+          }
           error!
-        else
-          action!
-          error!
-        end
       }
+
       if @app
         @app.call(@response.finish)
       else
@@ -49,7 +49,8 @@ module Kaffe
             puts "Should not be here"
             @response.status = 500
         end
-      rescue # Something got wrong and havent been handeled.
+      rescue # Something gone wrong and havent been handeled.
+        puts "WARN: Define your error handlers!!!"
         @response.status = env['kaffe.error'].first
         @response.body = [env['kaffe.error'].last]
       end

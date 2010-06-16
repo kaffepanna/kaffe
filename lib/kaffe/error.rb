@@ -1,24 +1,5 @@
 module Kaffe
   module Error
-    class GenericError < Exception
-      def code; @code; end
-      def initialize(code, message="There Was An error")
-        @code = code
-        super(message)
-      end
-    end
-    class ActionNotFound < GenericError
-      def initialize(message)
-        super(404, message)
-      end
-    end
-    
-    class InternalServerError < GenericError
-      def initialize(message)
-        super(500, message)
-      end
-    end
-
     module ClassMethods
 
       def errors; @errors ||= [] end
@@ -39,10 +20,11 @@ module Kaffe
 
     def register_error(code, message)
       env['kaffe.error'] = [code, message]
+      throw :error, env['kaffe.error']
     end
 
     def dispatch_error!
-      e = env['kaffe.error'] || [500, "No Error handler"]
+      e = env['kaffe.error'] || [500, "Unknown Server Error"]
       code = e.first
       block=nil
       self.class.errors.each do |name, id|
@@ -63,7 +45,7 @@ module Kaffe
           block.call
         end
       end
-      throw :no_error_handler, e
+      throw :error, e
     end
 
     def error!

@@ -51,20 +51,19 @@ module Kaffe
           end
         end
       end
-      raise Kaffe::Error::ActionNotFound.new("Could not find matching action for #{path}")
+      raise NoMethodError.new("Could not find matching action for #{path}")
     end
 
     def action!
       begin
         dispatch_action!
-      rescue Kaffe::Error::ActionNotFound => e
+      rescue NoMethodError => e
         register_error(404, "Could Not Find Action")
       rescue Exception => error
         register_error(500, error.message)
       ensure
         # TODO: after filter!
       end
-      nil
     end
 
     def self.included(base)
