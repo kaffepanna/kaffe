@@ -1,3 +1,4 @@
 *.swp
 public/*
 .bundle/
+config.ru

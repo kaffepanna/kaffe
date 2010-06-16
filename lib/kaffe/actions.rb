@@ -1,5 +1,4 @@
 module Kaffe
-  class ActionNotFound < Exception; end
 
   module Actions
     module ClassMethods
@@ -31,8 +30,8 @@ module Kaffe
         return [/^#{pattern}$/, keys]
       end
     end
-
-    def action!
+    
+    def dispatch_action!
       routes = self.class.actions[@request.request_method]
       path   = @request.path_info
       routes.each do |expr, keys, id|
@@ -52,18 +51,18 @@ module Kaffe
           end
         end
       end
-      raise ActionNotFound, "Could not find matching action for #{path}"
+      raise Kaffe::Error::ActionNotFound.new("Could not find matching action for #{path}")
     end
 
-    def dispatch_action!
+    def action!
       begin
-        action!
-      rescue ActionNotFound => error
-        @response.status = 404
-        @response.body = ["Not Found #{error}"]
+        dispatch_action!
+      rescue Kaffe::Error::ActionNotFound => e
+        puts "Could not find Action"
+        register_error(404, "Could Not Find Action")
       rescue Exception => error
-        @response.status = 500
-        @response.body = [error.to_s]
+        puts "There was an Exception"
+        register_error(500, error.message)
       ensure
         # TODO: after filter!
       end

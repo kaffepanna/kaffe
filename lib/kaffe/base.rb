@@ -4,6 +4,7 @@ require 'haml'
 
 module Kaffe
   class Base
+    include Kaffe::Error
     include Kaffe::Actions
     include Kaffe::Routes
     include Kaffe::Settings
@@ -14,20 +15,14 @@ module Kaffe
       @templates = {}
     end
 
-    def render(name)
-      #unless template = @templates[name]
-        template ||= Tilt.new(name, :ugly => true)
-      #end
-      template.render(self)
-    end
-
     def call(env)
       @env = env
       @request = Rack::Request.new(env)
       @response = Rack::Response.new
       run! { 
         route!
-        dispatch_action!
+        action!
+        error!
       }
     
       @response.finish
@@ -35,15 +30,16 @@ module Kaffe
 
     def run! &block
       res = catch(:success) { block.call }
-      return unless res
+      #return unless res
       case res
-        when String # Got a action result back
+        when String
           @response.body = [res]
-        when Array  # Got a route result back
+        when Array
           @response.status = res[0]
           res[1].each {|h, v| @response.headers[h] = v }
           @response.body = res[2]
         else
+          puts "Should not be here"
           @response.status = 500
       end
 
