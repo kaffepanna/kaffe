@@ -1,5 +1,6 @@
 *.swp
 *.haml
+tests/*
 config.ru
 public/*
 .bundle/
