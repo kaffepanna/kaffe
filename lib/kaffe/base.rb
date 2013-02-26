@@ -11,6 +11,9 @@ module Kaffe
     include Kaffe::Render
 
     attr_reader :params, :request, :response, :env
+
+    set :environment, proc { ENV['RACK_ENV'] || :development }
+
     def initialize(app=nil)
       @app = app
       @templates = {}
