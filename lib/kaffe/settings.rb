@@ -12,11 +12,7 @@ module Kaffe
       end
 
       def settings
-        @settings ||= if superclass.respond_to? :settings
-          Class.new(superclass.settings)
-        else
-          Class.new
-        end
+        self
       end
     end
 
