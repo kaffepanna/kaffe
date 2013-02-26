@@ -58,7 +58,7 @@ module Kaffe
       begin
         dispatch_action!
       rescue NoMethodError => e
-        register_error(404, "Could Not Find Action")
+        register_error(404, "Could Not Find Action: #{e.message}\n#{e.backtrace.join("\n")}")
       rescue Exception => error
         register_error(500, error.message)
       ensure
