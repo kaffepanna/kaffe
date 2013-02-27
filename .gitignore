@@ -1,6 +1,4 @@
-*.swp
-*.haml
-tests/*
-config.ru
-public/*
-.bundle/
+*
+!lib/*
+!.gitignore
+!Gemfile
