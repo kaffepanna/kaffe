@@ -1,6 +1,5 @@
 require 'rack'
 require 'tilt'
-require 'haml'
 
 module Kaffe
   class Base
@@ -23,9 +22,9 @@ module Kaffe
       @env = env
       @request = Rack::Request.new(env)
       @response = Rack::Response.new
-      run! { 
+      run! {
         # handle if errors were sent from route
-          env['kaffe.error'] = catch(:error) { 
+          env['kaffe.error'] = catch(:error) {
             route!
             action!
           }

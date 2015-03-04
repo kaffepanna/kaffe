@@ -1,4 +1,3 @@
-*
-!lib/*
-!.gitignore
-!Gemfile
+*.swp
+*.gem
+
