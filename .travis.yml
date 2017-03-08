@@ -8,7 +8,7 @@ before_deploy:
 deploy:
   - provider: rubygems
     api_key: ${RUBYGEMS_KEY}
-    gem: rbstruct
+    gem: kaffe
     on:
       tags: true
       repo: kaffepanna/kaffe
