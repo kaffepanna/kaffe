@@ -1,0 +1,21 @@
+language: ruby
+rvm:
+  - 2.3.1
+script: bundle exec rake spec
+before_deploy:
+  - bundle exec rake build
+  - export GEM_FILE="$(ls -1 pkg/*.gem | tail -n1)"
+deploy:
+  - provider: rubygems
+    api_key: ${RUBYGEMS_KEY}
+    gem: rbstruct
+    on:
+      tags: true
+      repo: kaffepanna/kaffe
+  - provider: releases
+    api_key: ${GITHUB_TOKEN}
+    file: ${GEM_FILE}
+    file_glob: true
+    on:
+      tags: true
+repo: kaffepanna/kaffe

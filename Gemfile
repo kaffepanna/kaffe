@@ -1,5 +1,4 @@
-source :gemcutter
+source 'https://rubygems.org'
 
-gem 'rack'
-gem 'haml'
-gem 'tilt'
+# Specify your gem's dependencies in kaffe.gemspec
+gemspec
